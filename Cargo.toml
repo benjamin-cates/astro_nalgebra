@@ -1,0 +1,33 @@
+[package]
+name = "astro_nalgebra"
+version = "0.1.0"
+edition = "2021"
+authors = ["Benjamin Cates <thebenjicat@gmail.com>"]
+license = "MIT"
+description = "Implementation of astro-float for nalgebra"
+keywords = ["bigfloat","nalgebra","arbitrary precision","numeric","float"]
+readme = "README.md"
+repository = "https://github.com/benjamin-cates/astro_nalgebra"
+
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+[dependencies]
+astro-float = { version = "0.9.1", default-features = false }
+nalgebra = "0.32.3"
+num-traits = "^0.2"
+simba = "^0.8"
+approx = "^0.5"
+serde = {version = "^1.0", optional = true, features = ["derive"]}
+
+[dev-dependencies]
+rand = "0.8.5"
+
+[features]
+default = ["std", "random", "serde"]
+std = ["astro-float/std"]
+serde = ["astro-float/serde"]
+random = ["astro-float/random"]
+
