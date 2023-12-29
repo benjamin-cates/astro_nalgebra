@@ -28,6 +28,6 @@ rand = "0.8.5"
 [features]
 default = ["std", "random", "serde"]
 std = ["astro-float/std"]
-serde = ["astro-float/serde"]
+serde = ["dep:serde", "astro-float/serde"]
 random = ["astro-float/random"]
 
