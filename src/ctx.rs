@@ -160,19 +160,23 @@ macro_rules! make_dyn_ctx {
         static $singleton_name: core::sync::OnceLock<(usize, astro_nalgebra::RoundingMode)> =
             core::sync::OnceLock::new();
         impl $type_name {
+            #[inline]
             fn set(prec: usize, rm: astro_nalgebra::RoundingMode) {
                 $singleton_name
                     .set((prec, rm))
                     .expect("Cannot set dynamic precision twice");
             }
+            #[inline]
             fn is_set() -> bool {
                 $singleton_name.get().is_some()
             }
         }
         impl astro_nalgebra::BigFloatCtx for $type_name {
+            #[inline]
             fn get_prec() -> usize {
                 $singleton_name.get().unwrap().0
             }
+            #[inline]
             fn get_rm() -> astro_nalgebra::RoundingMode {
                 $singleton_name.get().unwrap().1
             }
@@ -221,17 +225,21 @@ macro_rules! make_dyn_ctx {
         static mut $singleton_name: (usize, astro_nalgebra::RoundingMode) =
             (0, astro_nalgebra::RoundingMode::None);
         impl $type_name {
+            #[inline]
             fn set(prec: usize, rm: astro_nalgebra::RoundingMode) {
                 unsafe { $singleton_name = (prec, rm) }
             }
+            #[inline]
             fn is_set() -> bool {
                 unsafe { $singleton_name.0 != 0 }
             }
         }
         impl astro_nalgebra::BigFloatCtx for $type_name {
+            #[inline]
             fn get_prec() -> usize {
                 unsafe { $singleton_name.0 }
             }
+            #[inline]
             fn get_rm() -> astro_nalgebra::RoundingMode {
                 unsafe { $singleton_name.1 }
             }
