@@ -93,6 +93,7 @@ impl<CTX: BigFloatCtx> BigFloat<CTX> {
 macro_rules! cast_float {
     ($type:ty) => {
         impl<CTX: BigFloatCtx> From<BigFloat<CTX>> for $type {
+            #[inline]
             fn from(x: BigFloat<CTX>) -> Self {
                 x.as_f64() as Self
             }
