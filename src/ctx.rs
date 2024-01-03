@@ -180,6 +180,36 @@ macro_rules! make_dyn_ctx {
     };
 }
 
+/// Creates a dynamic context with a precision and rounding mode
+/// that can be set once at run-time.
+///
+/// This macro takes in the name of a dynamic context (the new type to be made)
+/// And the name of a global [`OnceLock`](std::sync::OnceLock) to store the precision and rounding mode.
+/// The name of this global variable is not important, it just has to be unique
+/// within the scope of the macro call.
+///
+/// The method `{ContextName}::set(precision, rounding_mode)` when called will
+/// set the precision and rounding mode of that context. Calling set twice will cause a panic.
+///
+/// ## Example
+/// ```rust
+/// use astro_nalgebra::{BigFloat, make_dyn_ctx, RoundingMode};
+///
+/// make_dyn_ctx!(DynCtx, DYN_CTX_CELL);
+///
+/// type DynFloat = BigFloat<DynCtx>;
+/// fn main() {
+///     assert_eq!(DynCtx::is_set(), false);
+///     let precision = 88;
+///     let rounding_mode = RoundingMode::None;
+///     // Sets the precision and rounding mode of the DynCtx context.
+///     // This method will panic if it is called twice.
+///     DynCtx::set(precision, rounding_mode);
+///     // Context is now set, do not call DynCtx::set again
+///     assert_eq!(DynCtx::is_set(), true);
+///     let num: DynFloat = "120".parse().unwrap();
+/// }
+/// ```
 #[cfg(not(std))]
 #[macro_export]
 macro_rules! make_dyn_ctx {
