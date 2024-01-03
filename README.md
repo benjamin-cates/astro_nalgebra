@@ -65,4 +65,5 @@ fn mul_by_pi<T: RealField>(val: T) -> T {
     val * T::pi()
 }
 ```
-If the desired precision of the calculation was stored in val, then the call to `BigFloat::pi()` would not be able to access the precision because `RealField::pi()` does not take any arguments. Therefore, the desired precision has to be stored in the type itself. This does mean that it does not support precision specification at runtime.
+If the desired precision of the calculation was stored in val, then the call to `BigFloat::pi()` would not be able to access the precision because `RealField::pi()` does not take any arguments. Therefore, the desired precision has to be stored in the type itself.
+
