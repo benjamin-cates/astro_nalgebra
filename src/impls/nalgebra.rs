@@ -20,16 +20,19 @@ macro_rules! unary {
         }
     };
     ($name:ident, no consts) => {
+        #[inline]
         fn $name(self) -> Self {
             Self::from(self.num.$name(CTX::get_prec(), CTX::get_rm()))
         }
     };
     ($name:ident, no prec) => {
+        #[inline]
         fn $name(self) -> Self {
             Self::from(self.num.$name())
         }
     };
     ($name:ident, $selfname:ident -> $val:expr) => {
+        #[inline]
         fn $name($selfname) -> Self {
             $val
         }
@@ -56,6 +59,7 @@ macro_rules! get_const {
         }
     };
     ($name:ident, $val:expr) => {
+        #[inline]
         fn $name() -> Self {
             $val
         }
@@ -63,9 +67,11 @@ macro_rules! get_const {
 }
 
 impl<CTX: BigFloatCtx + 'static> RealField for BigFloat<CTX> {
+    #[inline(always)]
     fn is_sign_positive(&self) -> bool {
         self.num.is_positive()
     }
+    #[inline(always)]
     fn is_sign_negative(&self) -> bool {
         self.num.is_negative()
     }
@@ -89,9 +95,11 @@ impl<CTX: BigFloatCtx + 'static> RealField for BigFloat<CTX> {
             Self::from(self.num.min(&other.num))
         }
     }
+    #[inline(always)]
     fn clamp(self, min: Self, max: Self) -> Self {
         Self::from(self.num.clamp(&min.num, &max.num))
     }
+    #[inline(always)]
     fn copysign(mut self, sign: Self) -> Self {
         self.num.set_sign(sign.num.sign().unwrap());
         self
@@ -108,10 +116,12 @@ impl<CTX: BigFloatCtx + 'static> RealField for BigFloat<CTX> {
     get_const!(ln_10);
     get_const!(log2_e, Self::log2(Self::e()));
     get_const!(log10_e, Self::log10(Self::e()));
+    #[inline]
     fn min_value() -> Option<Self> {
         let p = CTX::get_prec();
         Some(BigFloat::from(astro_float::BigFloat::min_value(p)))
     }
+    #[inline]
     fn max_value() -> Option<Self> {
         let p = CTX::get_prec();
         Some(BigFloat::from(astro_float::BigFloat::max_value(p)))
@@ -147,17 +157,21 @@ impl<CTX: BigFloatCtx + 'static> RealField for BigFloat<CTX> {
 impl<CTX: BigFloatCtx + 'static> ComplexField for BigFloat<CTX> {
     type RealField = Self;
 
+    #[inline(always)]
     fn is_finite(&self) -> bool {
         !self.num.is_inf()
     }
 
     // Basic operations
+    #[inline(always)]
     fn scale(self, factor: Self::RealField) -> Self {
         self * factor
     }
+    #[inline(always)]
     fn unscale(self, factor: Self::RealField) -> Self {
         self / factor
     }
+    #[inline(always)]
     fn mul_add(self, a: Self, b: Self) -> Self {
         self * a + b
     }
@@ -175,6 +189,7 @@ impl<CTX: BigFloatCtx + 'static> ComplexField for BigFloat<CTX> {
 
     // "Imaginary" number functions
     unary!(real, self -> self);
+    #[inline(always)]
     fn from_real(re: Self::RealField) -> Self {
         re
     }
@@ -183,6 +198,7 @@ impl<CTX: BigFloatCtx + 'static> ComplexField for BigFloat<CTX> {
         Self::from(self.num.mul(&self.num, CTX::get_prec(), CTX::get_rm()))
     }
     unary!(modulus, self -> self.abs());
+    #[inline(always)]
     fn argument(self) -> Self::RealField {
         if self.is_sign_negative() {
             Self::pi()
@@ -197,6 +213,7 @@ impl<CTX: BigFloatCtx + 'static> ComplexField for BigFloat<CTX> {
     unary!(ln);
     unary!(log2);
     unary!(log10);
+    #[inline(always)]
     fn log(self, base: Self::RealField) -> Self {
         self.ln() / base.ln()
     }
@@ -205,6 +222,7 @@ impl<CTX: BigFloatCtx + 'static> ComplexField for BigFloat<CTX> {
     // Exponential
     unary!(exp);
     unary!(exp2, self -> Self::from_f64(2.).unwrap().powf(self));
+    #[inline(always)]
     fn exp_m1(self) -> Self {
         self.exp() - Self::one()
     }
@@ -224,6 +242,7 @@ impl<CTX: BigFloatCtx + 'static> ComplexField for BigFloat<CTX> {
     }
     unary!(sqrt, no consts);
     unary!(cbrt, no consts);
+    #[inline(always)]
     fn try_sqrt(self) -> Option<Self> {
         if self.num.is_negative() {
             None
@@ -233,6 +252,7 @@ impl<CTX: BigFloatCtx + 'static> ComplexField for BigFloat<CTX> {
             ))
         }
     }
+    #[inline(always)]
     fn powc(self, n: Self) -> Self {
         self.powf(n)
     }

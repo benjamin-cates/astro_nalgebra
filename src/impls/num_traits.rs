@@ -38,6 +38,7 @@ impl<CTX: BigFloatCtx> FromPrimitive for BigFloat<CTX> {
 }
 
 impl<CTX: BigFloatCtx> Zero for BigFloat<CTX> {
+    #[inline]
     fn zero() -> Self {
         Self::from(astro_float::BigFloat::from_word(0, CTX::get_prec()))
     }
@@ -48,6 +49,7 @@ impl<CTX: BigFloatCtx> Zero for BigFloat<CTX> {
 }
 
 impl<CTX: BigFloatCtx> One for BigFloat<CTX> {
+    #[inline]
     fn one() -> Self {
         Self::from(astro_float::BigFloat::from_word(1, CTX::get_prec()))
     }
@@ -111,12 +113,15 @@ impl<CTX: BigFloatCtx + 'static> num_traits::Signed for BigFloat<CTX> {
             Self::zero()
         }
     }
+    #[inline]
     fn abs(&self) -> Self {
         BigFloat::from(self.num.abs())
     }
+    #[inline]
     fn is_positive(&self) -> bool {
         self.num.is_positive()
     }
+    #[inline]
     fn is_negative(&self) -> bool {
         self.num.is_negative()
     }
