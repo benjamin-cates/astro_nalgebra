@@ -55,6 +55,7 @@ pub struct BigFloat<CTX: BigFloatCtx> {
 }
 
 impl<CTX: BigFloatCtx> From<astro_float::BigFloat> for BigFloat<CTX> {
+    #[inline]
     fn from(value: astro_float::BigFloat) -> Self {
         BigFloat {
             num: value,
@@ -64,6 +65,7 @@ impl<CTX: BigFloatCtx> From<astro_float::BigFloat> for BigFloat<CTX> {
 }
 
 impl<CTX: BigFloatCtx> Clone for BigFloat<CTX> {
+    #[inline]
     fn clone(&self) -> Self {
         BigFloat {
             num: self.num.clone(),
@@ -72,6 +74,7 @@ impl<CTX: BigFloatCtx> Clone for BigFloat<CTX> {
     }
 }
 impl<CTX: BigFloatCtx> PartialEq for BigFloat<CTX> {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         self.num == other.num
     }

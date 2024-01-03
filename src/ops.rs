@@ -10,6 +10,7 @@ use core::ops::{Sub, SubAssign};
 
 impl<CTX: BigFloatCtx> Neg for BigFloat<CTX> {
     type Output = Self;
+    #[inline]
     fn neg(self) -> Self {
         Self::from(-self.num)
     }
@@ -19,6 +20,7 @@ macro_rules! binary_op {
     ($name:ident, $func:ident) => {
         impl<CTX: BigFloatCtx> $name<Self> for BigFloat<CTX> {
             type Output = Self;
+            #[inline]
             fn $func(self, rhs: Self) -> Self {
                 Self::from(self.num.$func(&rhs.num, CTX::get_prec(), CTX::get_rm()))
             }
@@ -28,6 +30,7 @@ macro_rules! binary_op {
 macro_rules! binary_op_assign {
     ($name:ident, $func:ident, $calls:ident) => {
         impl<CTX: BigFloatCtx> $name<Self> for BigFloat<CTX> {
+            #[inline]
             fn $func(&mut self, rhs: Self) {
                 let out = self.num.$calls(&rhs.num, CTX::get_prec(), CTX::get_rm());
                 self.num = out;
@@ -47,18 +50,21 @@ binary_op_assign!(DivAssign, div_assign, div);
 
 impl<CTX: BigFloatCtx> Rem<Self> for BigFloat<CTX> {
     type Output = Self;
+    #[inline]
     fn rem(self, rhs: Self) -> Self {
         Self::from(self.num.rem(&rhs.num))
     }
 }
 
 impl<CTX: BigFloatCtx> RemAssign for BigFloat<CTX> {
+    #[inline]
     fn rem_assign(&mut self, rhs: Self) {
         self.num = self.num.rem(&rhs.num);
     }
 }
 
 impl<CTX: BigFloatCtx> PartialOrd<Self> for BigFloat<CTX> {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
         self.num.partial_cmp(&other.num)
     }
