@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["Benjamin Cates <thebenjicat@gmail.com>"]
 license = "MIT"
 description = "Implementation of astro-float for nalgebra"
-keywords = ["bigfloat","nalgebra","arbitrary precision","numeric","float"]
+keywords = ["bigfloat","nalgebra","arbitrary-precision","numeric","float"]
 readme = "README.md"
 repository = "https://github.com/benjamin-cates/astro_nalgebra"
 
